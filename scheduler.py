@@ -1,21 +1,14 @@
-# ============================================================
+
 #  scheduler.py — Automated daily data fetching
-#
+
 #  This script runs in the background and calls all 5 social
 #  media APIs every 6 hours to fetch fresh data.
-#
-#  Flow:
-#    1. Call Meta Graph API → get Instagram + Facebook posts
-#    2. Call LinkedIn API   → get LinkedIn posts
-#    3. Call YouTube API    → get YouTube videos
-#    4. Call TikTok API     → get TikTok videos
-#    5. Pandas cleans all data
-#    6. SQLAlchemy saves new rows to PostgreSQL (incremental)
-#    7. Redis cache is cleared so next dashboard load is fresh
-#
+
+# Flow: APIs fetch → Pandas cleans → PostgreSQL stores → Redis cache clears
+
 #  Run this alongside main.py:
-#    python scheduler.py
-# ============================================================
+#  python scheduler.py
+
 
 import schedule
 import time
@@ -30,7 +23,7 @@ from cache import cache_delete
 
 load_dotenv()
 
-# ── Account IDs (store these in your .env file) ──
+# Account IDs (store these in your .env file) 
 IG_USER_ID   = os.getenv("INSTAGRAM_USER_ID", "")
 FB_PAGE_ID   = os.getenv("FACEBOOK_PAGE_ID", "")
 LI_ORG_ID    = os.getenv("LINKEDIN_ORG_ID", "")
@@ -89,7 +82,7 @@ def fetch_all_platforms():
     db = SessionLocal()
     all_frames = []
 
-    # ── Instagram + Facebook (Meta Graph API) ──
+    #Instagram + Facebook (Meta Graph API) 
     if IG_USER_ID and os.getenv("META_ACCESS_TOKEN"):
         try:
             from api_clients.meta import fetch_instagram_posts
@@ -98,48 +91,48 @@ def fetch_all_platforms():
             ig_df = clean_posts_dataframe(ig_df)
             ig_df = calculate_engagement_rate(ig_df)
             all_frames.append(ig_df)
-            print(f"   ✅ Instagram: {len(ig_df)} posts fetched")
+            print(f"Instagram: {len(ig_df)} posts fetched")
         except Exception as e:
-            print(f"   ❌ Instagram error: {e}")
+            print(f"Instagram error: {e}")
 
     if FB_PAGE_ID and os.getenv("META_ACCESS_TOKEN"):
         try:
             from api_clients.meta import fetch_facebook_posts
-            print("👍 Fetching Facebook posts...")
+            print(" Fetching Facebook posts...")
             fb_df = fetch_facebook_posts(FB_PAGE_ID, days=30)
             fb_df = clean_posts_dataframe(fb_df)
             fb_df = calculate_engagement_rate(fb_df)
             all_frames.append(fb_df)
-            print(f"   ✅ Facebook: {len(fb_df)} posts fetched")
+            print(f"Facebook: {len(fb_df)} posts fetched")
         except Exception as e:
-            print(f"   ❌ Facebook error: {e}")
+            print(f" Facebook error: {e}")
 
     # ── LinkedIn API ──
     if LI_ORG_ID and os.getenv("LINKEDIN_ACCESS_TOKEN"):
         try:
             from api_clients.linkedin import fetch_linkedin_posts
-            print("💼 Fetching LinkedIn posts...")
+            print("Fetching LinkedIn posts...")
             li_df = fetch_linkedin_posts(LI_ORG_ID, days=30)
             li_df = clean_posts_dataframe(li_df)
             li_df = calculate_engagement_rate(li_df)
             all_frames.append(li_df)
-            print(f"   ✅ LinkedIn: {len(li_df)} posts fetched")
+            print(f"LinkedIn: {len(li_df)} posts fetched")
         except Exception as e:
-            print(f"   ❌ LinkedIn error: {e}")
+            print(f"LinkedIn error: {e}")
 
     # ── YouTube Data API v3 ──
     if YT_CHANNEL and os.getenv("YOUTUBE_API_KEY"):
         try:
             from api_clients.youtube_tiktok import fetch_youtube_videos
-            print("▶️  Fetching YouTube videos...")
+            print("Fetching YouTube videos...")
             yt_df = fetch_youtube_videos(YT_CHANNEL, days=30)
             yt_df = clean_posts_dataframe(yt_df)
             all_frames.append(yt_df)
-            print(f"   ✅ YouTube: {len(yt_df)} videos fetched")
+            print(f"YouTube: {len(yt_df)} videos fetched")
         except Exception as e:
-            print(f"   ❌ YouTube error: {e}")
+            print(f"YouTube error: {e}")
 
-    # ── TikTok Research API ──
+    #TikTok Research API
     if TT_USERNAME and os.getenv("TIKTOK_ACCESS_TOKEN"):
         try:
             from api_clients.youtube_tiktok import fetch_tiktok_videos
@@ -147,11 +140,11 @@ def fetch_all_platforms():
             tt_df = fetch_tiktok_videos(TT_USERNAME, days=30)
             tt_df = clean_posts_dataframe(tt_df)
             all_frames.append(tt_df)
-            print(f"   ✅ TikTok: {len(tt_df)} videos fetched")
+            print(f"TikTok: {len(tt_df)} videos fetched")
         except Exception as e:
-            print(f"   ❌ TikTok error: {e}")
+            print(f"TikTok error: {e}")
 
-    # ── Save all fetched data to PostgreSQL ──
+    #Save all fetched data to PostgreSQL
     total_saved = 0
     for df in all_frames:
         if not df.empty:
@@ -160,17 +153,17 @@ def fetch_all_platforms():
 
     db.close()
 
-    # ── Clear Redis cache so fresh data is served next time ──
+    #Clear Redis cache so fresh data is served next time
     for key in ["overview_all", "timeseries_all", "platform_breakdown",
                 "content_types_all", "best_hours", "hashtags", "accounts"]:
         cache_delete(key)
 
-    print(f"\n✅ Done! Saved {total_saved} new posts to PostgreSQL")
-    print(f"⚡ Redis cache cleared — fresh data ready")
+    print(f"\n Done! Saved {total_saved} new posts to PostgreSQL")
+    print(f"Redis cache cleared — fresh data ready")
     print(f"{'='*50}\n")
 
 
-# ── Schedule to run every 6 hours ──
+#Schedule to run every 6 hours
 schedule.every(6).hours.do(fetch_all_platforms)
 
 if __name__ == "__main__":
