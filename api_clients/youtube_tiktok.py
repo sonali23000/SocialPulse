@@ -1,6 +1,6 @@
-# ============================================================
+
 #  api_clients/youtube.py — YouTube Data API v3
-# ============================================================
+
 
 import requests
 import os
@@ -102,9 +102,9 @@ def fetch_youtube_videos(channel_id: str, days: int = 30) -> pd.DataFrame:
     return df
 
 
-# ============================================================
+
 #  api_clients/tiktok.py — TikTok Research API
-# ============================================================
+
 
 TIKTOK_BASE  = "https://open.tiktokapis.com/v2"
 TIKTOK_TOKEN = os.getenv("TIKTOK_ACCESS_TOKEN", "")

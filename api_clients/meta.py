@@ -1,18 +1,7 @@
-# ============================================================
-#  api_clients/meta.py — Meta Graph API
-#
+
 #  This file handles all communication with Meta's Graph API,
 #  which covers both Instagram and Facebook.
-#
-#  In a real deployment:
-#   1. Register your app at developers.facebook.com
-#   2. Get an access token with the right permissions
-#   3. Store the token in your .env file (never in code!)
-#   4. Python calls these functions on a schedule (e.g. every 6h)
-#
-#  Rate limiting: Meta allows a limited number of API calls
-#  per hour per token. This code handles that gracefully.
-# ============================================================
+
 
 import requests
 import os
