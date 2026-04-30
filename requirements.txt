@@ -1,0 +1,14 @@
+# Python packages required for the SocialPulse backend
+# Install all at once with: pip install -r requirements.txt
+
+fastapi==0.111.0        # Web framework — creates the API endpoints
+uvicorn==0.29.0         # Server that runs FastAPI
+sqlalchemy==2.0.29      # ORM — connects Python to PostgreSQL
+psycopg2-binary==2.9.9  # PostgreSQL driver (needed by SQLAlchemy)
+pandas==2.2.2           # Data cleaning and aggregation
+numpy==1.26.4           # Needed by Pandas
+redis==5.0.4            # Redis client — for caching
+python-dotenv==1.0.1    # Reads .env file for API keys
+requests==2.31.0        # Makes HTTP calls to social media APIs
+schedule==1.2.1         # Runs the data fetch scheduler
+alembic==1.13.1         # Database migrations (when schema changes)
