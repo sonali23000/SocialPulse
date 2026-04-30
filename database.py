@@ -1,14 +1,8 @@
-# ============================================================
-#  database.py — SQLAlchemy + PostgreSQL setup
-#
-#  SQLAlchemy is the tool that lets Python talk to PostgreSQL
-#  without writing raw SQL. Instead of:
-#    SELECT * FROM posts WHERE platform = 'Instagram'
-#  We write Python objects and SQLAlchemy translates it.
-#
-#  The DATABASE_URL reads from your .env file so your
-#  password is never written directly in code.
-# ============================================================
+
+# database.py — SQLAlchemy + PostgreSQL setup
+# SQLAlchemy lets Python talk to PostgreSQL using objects instead of raw SQL.
+# DATABASE_URL is loaded from .env so credentials stay out of the code.
+
 
 from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, Boolean
 from sqlalchemy.ext.declarative import declarative_base
