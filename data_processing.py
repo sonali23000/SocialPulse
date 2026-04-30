@@ -1,14 +1,6 @@
-# ============================================================
-#  data_processing.py — Pandas data cleaning & aggregation
-#
-#  This file does all the heavy data work using Pandas.
-#  The API clients (meta.py, linkedin.py, etc.) fetch raw data.
-#  This file cleans, transforms, and aggregates that raw data
-#  before it gets stored in PostgreSQL or returned to the frontend.
-#
-#  Think of Pandas here as the "kitchen" — raw ingredients come
-#  in from the APIs, Pandas preps them into something useful.
-# ============================================================
+# Cleans & aggregates raw social media API data using Pandas.
+# Flow: API clients fetch → this file processes → PostgreSQL stores
+
 
 import pandas as pd
 import numpy as np
