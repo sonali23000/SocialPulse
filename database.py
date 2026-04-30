@@ -11,10 +11,9 @@ from datetime import datetime
 import os
 from dotenv import load_dotenv
 
-load_dotenv()  # Reads values from your .env file
+load_dotenv()  
 
-# ── PostgreSQL connection string ──
-# Format: postgresql://username:password@host:port/database_name
+# PostgreSQL connection string
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
     "postgresql://postgres:yourpassword@localhost:5432/socialpulse"
@@ -30,7 +29,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 
-# ── Dependency: gives each route its own DB session ──
+# Dependency: gives each route its own DB session 
 def get_db():
     db = SessionLocal()
     try:
@@ -39,10 +38,10 @@ def get_db():
         db.close()
 
 
-# ============================================================
+
 #  DATABASE MODELS (SQLAlchemy ORM)
 #  Each class = one table in PostgreSQL
-# ============================================================
+
 
 class Account(Base):
     """
@@ -52,11 +51,11 @@ class Account(Base):
     __tablename__ = "accounts"
 
     id         = Column(Integer, primary_key=True, index=True)
-    platform   = Column(String, nullable=False)       # "Instagram", "TikTok", etc.
-    handle     = Column(String, nullable=False)       # "@sonali.brand"
+    platform   = Column(String, nullable=False)       
+    handle     = Column(String, nullable=False)       
     followers  = Column(Integer, default=0)
-    growth     = Column(Integer, default=0)           # follower change this week
-    api_source = Column(String)                       # "Meta Graph API", etc.
+    growth     = Column(Integer, default=0)           
+    api_source = Column(String)                       
     created_at = Column(DateTime, default=datetime.utcnow)
 
 
