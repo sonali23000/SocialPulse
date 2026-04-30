@@ -5,15 +5,15 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from "recharts";
 
-// ═══════════════════════════════════════
+
 //  BACKEND API URL
-//  Change this if your backend runs on a different port
-// ═══════════════════════════════════════
+
+
 const API = "http://localhost:8000";
 
-// ═══════════════════════════════════════
+
 //  DESIGN TOKENS
-// ═══════════════════════════════════════
+
 const PC = {
   Instagram: { color: "#E1306C", light: "#FFF0F5", grad: ["#f09433", "#dc2743", "#cc2366"] },
   Facebook:  { color: "#1877F2", light: "#EEF4FF", grad: ["#1877F2", "#42A5F5"] },
@@ -24,9 +24,9 @@ const PC = {
 const PIE_COLS = ["#E1306C", "#1877F2", "#0A66C2", "#FF0000", "#2DD4CF"];
 const PLATFORM_NAMES = ["Instagram", "Facebook", "LinkedIn", "YouTube", "TikTok"];
 
-// ═══════════════════════════════════════
+
 //  REUSABLE COMPONENTS
-// ═══════════════════════════════════════
+
 function Ava({ platform, size = 36 }) {
   const p = PC[platform] || { grad: ["#7C3AED", "#A78BFA"] };
   const label = platform ? platform.slice(0, 2).toUpperCase() : "??";
@@ -102,9 +102,9 @@ function ErrorBox({ message }) {
   );
 }
 
-// ═══════════════════════════════════════
+
 //  PAGE 1 — OVERVIEW
-// ═══════════════════════════════════════
+
 function OverviewPage({ filter }) {
   const [overview, setOverview] = useState(null);
   const [timeseries, setTimeseries] = useState([]);
@@ -212,9 +212,9 @@ function OverviewPage({ filter }) {
   );
 }
 
-// ═══════════════════════════════════════
+
 //  PAGE 2 — PLATFORMS
-// ═══════════════════════════════════════
+
 function PlatformsPage() {
   const [sel, setSel] = useState("Instagram");
   const [data, setData] = useState(null);
@@ -305,9 +305,9 @@ function PlatformsPage() {
   );
 }
 
-// ═══════════════════════════════════════
+
 //  PAGE 3 — INSIGHTS
-// ═══════════════════════════════════════
+
 function InsightsPage() {
   const [hours, setHours] = useState([]);
   const [tags, setTags] = useState([]);
@@ -372,9 +372,9 @@ function InsightsPage() {
   );
 }
 
-// ═══════════════════════════════════════
+
 //  PAGE 4 — PACKAGES
-// ═══════════════════════════════════════
+
 function PackagesPage() {
   const [billing, setBilling] = useState("monthly");
   const [chosen, setChosen] = useState("Pro");
@@ -431,9 +431,9 @@ function PackagesPage() {
   );
 }
 
-// ═══════════════════════════════════════
+
 //  MAIN APP
-// ═══════════════════════════════════════
+
 const TABS = [
   { id: "overview",  label: "Overview",  icon: "📊" },
   { id: "platforms", label: "Platforms", icon: "🌐" },
