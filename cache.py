@@ -1,15 +1,10 @@
-# ============================================================
-#  cache.py — Redis caching
+
+# cache.py — Redis caching
 #
-#  Redis stores a fast in-memory copy of dashboard data.
-#  When a user opens the dashboard:
-#    1. Python checks Redis first (very fast, < 1ms)
-#    2. If data is there and fresh → serve it immediately
-#    3. If not → query PostgreSQL, then save result to Redis
-#
-#  TTL (time-to-live) = 60 seconds. After 60s Redis clears
-#  the copy and the next request re-fetches from PostgreSQL.
-# ============================================================
+# Stores dashboard data in memory for fast access.
+# Check Redis first → if fresh, serve it; if not, query PostgreSQL + cache result.
+# TTL = 60s, after that Redis clears and re-fetches from PostgreSQL.
+
 
 import redis
 import json
@@ -25,11 +20,11 @@ try:
     redis_client = redis.from_url(REDIS_URL, decode_responses=True)
     redis_client.ping()
     REDIS_AVAILABLE = True
-    print("✅ Redis connected")
+    print("Redis connected")
 except Exception as e:
     redis_client = None
     REDIS_AVAILABLE = False
-    print(f"⚠️  Redis not available ({e}). Running without cache.")
+    print(f"Redis not available ({e}). Running without cache.")
 
 
 def cache_get(key: str):
