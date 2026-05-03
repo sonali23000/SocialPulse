@@ -16,7 +16,7 @@ load_dotenv()
 # PostgreSQL connection string
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "postgresql://postgres:yourpassword@localhost:5432/socialpulse"
+    "postgresql://postgres:sonali123@localhost:5432/socialpulse"
 )
 
 # Create the SQLAlchemy engine (the actual connection to PostgreSQL)

@@ -180,34 +180,120 @@ function OverviewPage({ filter }) {
         </ResponsiveContainer>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-        <div style={{ background: "#fff", borderRadius: 20, padding: 22, border: "1.5px solid #F0EDF8" }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#111827", marginBottom: 14 }}>🌐 Platform Share</div>
-          <ResponsiveContainer width="100%" height={185}>
-            <PieChart>
-              <Pie data={platforms} dataKey="engagement" nameKey="name" cx="50%" cy="50%"
-                outerRadius={76} innerRadius={32}
-                label={({ name, percent }) => `${name.slice(0, 2)} ${(percent * 100).toFixed(0)}%`}
-                labelLine={false} fontSize={10}>
-                {platforms.map((_, i) => <Cell key={i} fill={PIE_COLS[i]} />)}
-              </Pie>
-              <Tooltip content={<TT />} />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-        <div style={{ background: "#fff", borderRadius: 20, padding: 22, border: "1.5px solid #F0EDF8" }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#111827", marginBottom: 14 }}>🎬 Best Content Format</div>
-          <ResponsiveContainer width="100%" height={185}>
-            <BarChart data={contentTypes} layout="vertical" margin={{ left: 8, right: 8 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" horizontal={false} />
-              <XAxis type="number" tick={{ fontSize: 10, fill: "#9CA3AF" }} tickLine={false} axisLine={false} />
-              <YAxis type="category" dataKey="type" tick={{ fontSize: 11, fill: "#374151", fontWeight: 600 }} tickLine={false} axisLine={false} width={60} />
-              <Tooltip content={<TT />} />
-              <Bar dataKey="avgEng" name="Avg Engagement" radius={[0, 6, 6, 0]} fill="#7C3AED" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+
+{/* ── PLATFORM SHARE ── */}
+<div style={{
+  background: "linear-gradient(145deg, #ffffff, #faf7ff)",
+  borderRadius: 24,
+  padding: "24px 24px 16px",
+  border: "1.5px solid #ede9fe",
+  boxShadow: "0 4px 24px rgba(124,58,237,0.07)"
+}}>
+  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+    <span style={{
+      background: "linear-gradient(135deg,#7C3AED,#a78bfa)",
+      borderRadius: 10, padding: "5px 10px",
+      fontSize: 15
+    }}>🌐</span>
+    <span style={{ fontSize: 14, fontWeight: 800, color: "#1e1b4b", letterSpacing: "-0.3px" }}>
+      Platform Share
+    </span>
+  </div>
+  <p style={{ fontSize: 11, color: "#9CA3AF", marginBottom: 12, marginTop: 2 }}>
+    Engagement distribution across platforms
+  </p>
+  <ResponsiveContainer width="100%" height={210}>
+    <PieChart>
+      <Pie
+        data={platforms}
+        dataKey="engagement"
+        nameKey="name"
+        cx="50%" cy="50%"
+        outerRadius={82}
+        innerRadius={42}
+        paddingAngle={3}
+        label={({ name, percent }) =>
+          `${name.slice(0, 2)} ${(percent * 100).toFixed(0)}%`
+        }
+        labelLine={false}
+        fontSize={11}
+        fontWeight={700}
+      >
+        {platforms.map((_, i) => (
+          <Cell key={i} fill={PIE_COLS[i]} />
+        ))}
+      </Pie>
+      <Tooltip content={<TT />} />
+      <Legend
+        iconType="circle"
+        iconSize={8}
+        wrapperStyle={{ fontSize: 11, paddingTop: 8 }}
+      />
+    </PieChart>
+  </ResponsiveContainer>
+</div>
+
+{/* ── BEST CONTENT FORMAT ── */}
+<div style={{
+  background: "linear-gradient(145deg, #ffffff, #faf7ff)",
+  borderRadius: 24,
+  padding: "24px 24px 16px",
+  border: "1.5px solid #ede9fe",
+  boxShadow: "0 4px 24px rgba(124,58,237,0.07)"
+}}>
+  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+    <span style={{
+      background: "linear-gradient(135deg,#EC4899,#f472b6)",
+      borderRadius: 10, padding: "5px 10px",
+      fontSize: 15
+    }}>🎬</span>
+    <span style={{ fontSize: 14, fontWeight: 800, color: "#1e1b4b", letterSpacing: "-0.3px" }}>
+      Best Content Format
+    </span>
+  </div>
+  <p style={{ fontSize: 11, color: "#9CA3AF", marginBottom: 12, marginTop: 2 }}>
+    Average engagement score by content type
+  </p>
+  <ResponsiveContainer width="100%" height={210}>
+    <BarChart
+      data={contentTypes}
+      layout="vertical"
+      margin={{ left: 8, right: 24, top: 4, bottom: 4 }}
+    >
+      <defs>
+        <linearGradient id="barGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#7C3AED" />
+          <stop offset="100%" stopColor="#EC4899" />
+        </linearGradient>
+      </defs>
+      <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" horizontal={false} />
+      <XAxis
+        type="number"
+        tick={{ fontSize: 10, fill: "#9CA3AF" }}
+        tickLine={false}
+        axisLine={false}
+      />
+      <YAxis
+        type="category"
+        dataKey="type"
+        tick={{ fontSize: 11, fill: "#374151", fontWeight: 700 }}
+        tickLine={false}
+        axisLine={false}
+        width={65}
+      />
+      <Tooltip content={<TT />} />
+      <Bar
+        dataKey="avgEng"
+        name="Avg Engagement"
+        radius={[0, 8, 8, 0]}
+        fill="url(#barGrad)"
+        maxBarSize={22}
+      />
+    </BarChart>
+  </ResponsiveContainer>
+</div>
+</div>
     </div>
   );
 }
