@@ -719,7 +719,7 @@ export default function SocialPulseApp() {
       </div>
 
       <div style={{ textAlign: "center", padding: "22px", color: "#D1D5DB", fontSize: 11 }}>
-        SocialPulse · React + Recharts frontend · FastAPI + PostgreSQL + Redis backend · Sonali Mitua · Bachelor's Thesis 2026
+        
       </div>
     </div>
   );
