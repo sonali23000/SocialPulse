@@ -392,66 +392,124 @@ function PlatformsPage() {
 }
 
 
-//  PAGE 3 — INSIGHTS
+//  PAGE 3 — GROWTH TIPS
 
-function InsightsPage() {
-  const [hours, setHours] = useState([]);
-  const [tags, setTags] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    setLoading(true);
-    Promise.all([
-      fetch(`${API}/api/analytics/best-hours`).then(r => r.json()),
-      fetch(`${API}/api/analytics/hashtags`).then(r => r.json()),
-    ])
-      .then(([h, t]) => {
-        setHours(h.data || []);
-        setTags(t.data || []);
-        setLoading(false);
-      })
-      .catch(() => { setError("Could not load insights data."); setLoading(false); });
-  }, []);
-
-  if (loading) return <LoadingSpinner text="Loading insights..." />;
-  if (error) return <ErrorBox message={error} />;
-
-  const bestH = hours.length ? hours.reduce((bi, h, i) => h.engagement > hours[bi].engagement ? i : bi, 0) : 0;
+function GrowthTipsPage() {
+  const tips = [
+    {
+      category: "🔥 Go Viral",
+      color: "#FF4D4D",
+      light: "#FFF0F0",
+      items: [
+        { title: "Hook in the first 3 seconds", desc: "On TikTok and Reels, viewers decide in 3 seconds. Start with a bold statement, a question, or something visually surprising. Never start with 'Hi guys'." },
+        { title: "Use trending audio early", desc: "When a sound is trending but not yet overused (under 50K uses on TikTok), jump on it fast. Early adopters get the algorithm push." },
+        { title: "Post at peak hours", desc: "Best windows: 7–9 AM, 12–2 PM, and 7–10 PM in your audience's timezone. Consistency beats occasional viral luck." },
+        { title: "Reply to comments with a video", desc: "On TikTok, replying to a comment with a video doubles your content output and keeps the algorithm feeding your profile." },
+      ]
+    },
+    {
+      category: "📈 Grow Your Reach",
+      color: "#7C3AED",
+      light: "#F5F0FF",
+      items: [
+        { title: "Use 3–5 niche hashtags, not 30 generic ones", desc: "#makeup has 50M posts. #koreanglassskinroutine has 80K. Niche tags put you in front of people who actually care." },
+        { title: "Collaborate with creators at your level", desc: "Don't only aim for big names. Creators with similar follower counts have loyal, engaged audiences. A shoutout swap can bring 500–2000 new followers." },
+        { title: "Cross-post strategically", desc: "Post on TikTok first, wait 24h, then share the same video to Instagram Reels and YouTube Shorts. Each platform treats it as fresh content." },
+        { title: "Engage within the first 30 minutes", desc: "Right after posting, reply to every comment and like other posts in your niche. This signals activity to the algorithm and boosts distribution." },
+      ]
+    },
+    {
+      category: "🌊 Ride Trends",
+      color: "#0EA5E9",
+      light: "#F0F9FF",
+      items: [
+        { title: "Check TikTok Creative Center weekly", desc: "TikTok's own Creative Center shows trending sounds, hashtags and content formats by country. Visit it every Monday to plan your week." },
+        { title: "Put your own spin on trends", desc: "Don't just copy a trend — add your niche to it. A makeup artist doing the 'get ready with me' trend while reacting to a viral story gets double the algorithm love." },
+        { title: "Use Google Trends for content ideas", desc: "Search your niche on Google Trends and filter by 'past 7 days'. Rising topics there often haven't hit social media yet — you can be first." },
+        { title: "React or duet trending content", desc: "Duets and Stitches on TikTok borrow reach from the original video. React to something with 1M+ views and you inherit part of that audience." },
+      ]
+    },
+    {
+      category: "💄 Beauty & Makeup Creator Tips",
+      color: "#EC4899",
+      light: "#FFF0F8",
+      items: [
+        { title: "Before & after is king", desc: "Side-by-side transformation videos consistently outperform tutorials in reach. Show the before clearly, then the dramatic after. Keep it under 30 seconds." },
+        { title: "Use product names in captions", desc: "People search for specific products. 'Charlotte Tilbury Flawless Filter dupe' will get found; 'my fave base' will not." },
+        { title: "POV and GRWM formats have built-in audiences", desc: "\"POV: doing my makeup for a 5-star dinner\" or \"GRWM for a first date\" tap into emotional storytelling which gets shared more than how-to content." },
+        { title: "Tag brands — even without a deal", desc: "Tagging brands gets their attention and sometimes a reshare to their audience. Many brand deals start from an organic tag that impressed their team." },
+      ]
+    },
+  ];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-      <div style={{ background: "#fff", borderRadius: 20, padding: 22, border: "1.5px solid #F0EDF8" }}>
-        <div style={{ fontSize: 14, fontWeight: 800, color: "#111827", marginBottom: 14 }}>⏰ Best Hours to Post</div>
-        <ResponsiveContainer width="100%" height={160}>
-          <BarChart data={hours} margin={{ left: -20, right: 4, top: 4, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
-            <XAxis dataKey="hour" tick={{ fontSize: 9, fill: "#9CA3AF" }} tickLine={false} axisLine={false} interval={1} />
-            <YAxis tick={{ fontSize: 10, fill: "#9CA3AF" }} tickLine={false} axisLine={false} />
-            <Tooltip content={<TT />} />
-            <Bar dataKey="engagement" name="Avg Engagement" radius={[4, 4, 0, 0]}>
-              {hours.map((_, i) => <Cell key={i} fill={i === bestH ? "#7C3AED" : i === bestH - 1 || i === bestH + 1 ? "#A78BFA" : "#E5E7EB"} />)}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+    <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+      <div style={{
+        background: "linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)",
+        borderRadius: 24, padding: "28px 28px",
+        color: "#fff", position: "relative", overflow: "hidden"
+      }}>
+        <div style={{ position: "absolute", right: 24, top: 12, fontSize: 72, opacity: 0.15 }}>🚀</div>
+        <div style={{ fontSize: 22, fontWeight: 900, marginBottom: 6 }}>Creator Growth Hub</div>
+        <div style={{ fontSize: 13, opacity: 0.85, maxWidth: 520, lineHeight: 1.6 }}>
+          Practical tips to go viral, grow your reach and stay ahead of trends — built for social media creators like you.
+        </div>
       </div>
 
-      <div style={{ background: "#fff", borderRadius: 20, padding: 22, border: "1.5px solid #F0EDF8" }}>
-        <div style={{ fontSize: 14, fontWeight: 800, color: "#111827", marginBottom: 14 }}>#️⃣ Hashtag Performance</div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {tags.map((t, i) => (
-            <div key={t.tag} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: "#374151", minWidth: 155 }}>{t.tag}</div>
-              <div style={{ flex: 1, background: "#F3F4F6", borderRadius: 99, height: 7, overflow: "hidden" }}>
-                <div style={{
-                  width: `${(t.reach / (tags[0]?.reach || 1)) * 100}%`, height: "100%",
-                  background: `hsl(${250 - i * 20},70%,58%)`, borderRadius: 99, transition: "width .6s ease",
-                }} />
+      {tips.map(section => (
+        <div key={section.category} style={{
+          background: "#fff", borderRadius: 24,
+          border: `1.5px solid ${section.light}`,
+          boxShadow: `0 4px 20px ${section.color}18`,
+          overflow: "hidden"
+        }}>
+          <div style={{
+            background: section.light, padding: "14px 22px",
+            display: "flex", alignItems: "center", gap: 10,
+            borderBottom: `1.5px solid ${section.color}22`
+          }}>
+            <span style={{ fontSize: 18 }}>{section.category.split(" ")[0]}</span>
+            <span style={{ fontSize: 14, fontWeight: 800, color: section.color }}>
+              {section.category.split(" ").slice(1).join(" ")}
+            </span>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0 }}>
+            {section.items.map((tip, i) => (
+              <div key={i} style={{
+                padding: "18px 22px",
+                borderRight: i % 2 === 0 ? "1px solid #F3F4F6" : "none",
+                borderBottom: i < 2 ? "1px solid #F3F4F6" : "none",
+              }}>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                  <div style={{
+                    minWidth: 28, height: 28, borderRadius: 8,
+                    background: section.light,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 13, fontWeight: 900, color: section.color, marginTop: 1
+                  }}>{i + 1}</div>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 800, color: "#111827", marginBottom: 5 }}>{tip.title}</div>
+                    <div style={{ fontSize: 12, color: "#6B7280", lineHeight: 1.6 }}>{tip.desc}</div>
+                  </div>
+                </div>
               </div>
-              <div style={{ fontSize: 11, color: "#6B7280", minWidth: 75, textAlign: "right" }}>{t.reach?.toLocaleString()}</div>
-              <div style={{ fontSize: 10, color: "#9CA3AF", minWidth: 44, textAlign: "right" }}>{t.posts}p</div>
-            </div>
-          ))}
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <div style={{
+        background: "linear-gradient(135deg, #faf7ff, #fff0f8)",
+        borderRadius: 20, padding: "18px 24px",
+        border: "1.5px solid #ede9fe",
+        display: "flex", alignItems: "center", gap: 14
+      }}>
+        <span style={{ fontSize: 32 }}>💡</span>
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#1e1b4b", marginBottom: 3 }}>Consistency beats perfection</div>
+          <div style={{ fontSize: 12, color: "#6B7280", lineHeight: 1.6 }}>
+            Posting 4× a week with average content beats posting once a week with perfect content. The algorithm rewards frequency and engagement signals — keep showing up.
+          </div>
         </div>
       </div>
     </div>
@@ -523,14 +581,102 @@ function PackagesPage() {
 const TABS = [
   { id: "overview",  label: "Overview",  icon: "📊" },
   { id: "platforms", label: "Platforms", icon: "🌐" },
-  { id: "insights",  label: "Insights",  icon: "💡" },
+  { id: "growthtips", label: "Growth Tips", icon: "🚀" },
   { id: "packages",  label: "Packages",  icon: "💎" },
 ];
+
+const CREATOR_QUOTES = [
+  { text: "Consistency is more important than perfection.", author: "Gary Vee" },
+  { text: "Your story is what makes people follow you, not your filter.", author: "Unknown" },
+  { text: "Post with purpose. Every caption, every hashtag, every reel.", author: "Creator Mindset" },
+  { text: "The algorithm rewards those who show up every day.", author: "Social Media wisdom" },
+  { text: "Authenticity converts. Perfection just looks pretty.", author: "Unknown" },
+  { text: "Trending audio + your niche = free reach.", author: "TikTok creators" },
+  { text: "Your next video could change someone's life. Post it.", author: "Creator Mindset" },
+  { text: "Engagement beats follower count every single time.", author: "Marketing truth" },
+];
+
+const BEST_POST_TIMES = [
+  { hour: 7,  label: "7 AM",  note: "Morning scroll crowd ☀️" },
+  { hour: 12, label: "12 PM", note: "Lunch break viewers 🍱" },
+  { hour: 17, label: "5 PM",  note: "After work peak 🏃" },
+  { hour: 19, label: "7 PM",  note: "Prime time audience 🌙" },
+  { hour: 21, label: "9 PM",  note: "Late night scrollers 🌟" },
+];
+
+const TRENDING_TAGS = [
+  "#GlowUp", "#MakeupTutorial", "#GRWM", "#SkincareTips", "#ContentCreator",
+  "#ViralMakeup", "#BeautyTips", "#TikTokMakeup", "#ReelsViral", "#MakeupLooks",
+];
+
+function HeaderWidget() {
+  const [quoteIdx, setQuoteIdx] = useState(0);
+  const [activeTab, setActiveTab] = useState("quote");
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const q = setInterval(() => setQuoteIdx(i => (i + 1) % CREATOR_QUOTES.length), 6000);
+    return () => clearInterval(q);
+  }, []);
+
+  useEffect(() => {
+    const t = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  const hour = time.getHours();
+  const best = BEST_POST_TIMES.reduce((prev, curr) =>
+    Math.abs(curr.hour - hour) < Math.abs(prev.hour - hour) ? curr : prev
+  );
+  const isGoodTime = Math.abs(best.hour - hour) <= 1;
+  const q = CREATOR_QUOTES[quoteIdx];
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6, maxWidth: 340 }}>
+      <div style={{ display: "flex", gap: 3, background: "#F5F0FF", borderRadius: 10, padding: 3 }}>
+        {[{ id: "quote", icon: "💬" }, { id: "posttime", icon: "⏰" }, { id: "hashtags", icon: "🔥" }].map(tb => (
+          <button key={tb.id} onClick={() => setActiveTab(tb.id)} style={{
+            border: "none", borderRadius: 8, padding: "4px 10px", fontSize: 13,
+            cursor: "pointer", transition: "all .15s",
+            background: activeTab === tb.id ? "#7C3AED" : "transparent",
+            color: activeTab === tb.id ? "#fff" : "#9CA3AF",
+          }}>{tb.icon}</button>
+        ))}
+      </div>
+
+      {activeTab === "quote" && (
+        <div style={{ background: "linear-gradient(135deg,#7C3AED,#EC4899)", borderRadius: 14, padding: "10px 14px", maxWidth: 320 }}>
+          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.9)", lineHeight: 1.5, fontStyle: "italic" }}>"{q.text}"</div>
+          <div style={{ fontSize: 10, color: "rgba(255,255,255,0.65)", marginTop: 4, textAlign: "right" }}>— {q.author}</div>
+        </div>
+      )}
+
+      {activeTab === "posttime" && (
+        <div style={{ background: isGoodTime ? "linear-gradient(135deg,#10B981,#059669)" : "linear-gradient(135deg,#F59E0B,#D97706)", borderRadius: 14, padding: "10px 14px", minWidth: 220 }}>
+          <div style={{ fontSize: 10, color: "rgba(255,255,255,0.75)", marginBottom: 3 }}>🕐 Now: {time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</div>
+          <div style={{ fontSize: 12, fontWeight: 800, color: "#fff" }}>{isGoodTime ? "✅ Great time to post!" : `⏳ Next best: ${best.label}`}</div>
+          <div style={{ fontSize: 10, color: "rgba(255,255,255,0.8)", marginTop: 2 }}>{best.note}</div>
+        </div>
+      )}
+
+      {activeTab === "hashtags" && (
+        <div style={{ background: "#fff", borderRadius: 14, padding: "10px 14px", border: "1.5px solid #ede9fe", minWidth: 260, boxShadow: "0 4px 16px rgba(124,58,237,0.08)" }}>
+          <div style={{ fontSize: 10, color: "#9CA3AF", marginBottom: 6, fontWeight: 700 }}>🔥 Trending for Beauty Creators</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+            {TRENDING_TAGS.map(tag => (
+              <span key={tag} style={{ background: "linear-gradient(135deg,#F5F0FF,#FFF0F8)", color: "#7C3AED", fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 20, border: "1px solid #ede9fe" }}>{tag}</span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function SocialPulseApp() {
   const [tab, setTab] = useState("overview");
   const [filter, setFilter] = useState("All");
-
+  const [page, setPage] = useState("app"); // "app" | "sign in" | "Get started"
   return (
     <div style={{ minHeight: "100vh", background: "#F8F7FC", fontFamily: "'Inter','Segoe UI',sans-serif" }}>
       <div style={{ background: "#fff", borderBottom: "1.5px solid #F0EDF8", padding: "11px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 100, boxShadow: "0 2px 14px rgba(124,58,237,.05)" }}>
@@ -543,9 +689,7 @@ export default function SocialPulseApp() {
             <div style={{ fontSize: 10, color: "#9CA3AF" }}>Digital & Social Media Analytics</div>
           </div>
         </div>
-        <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-          {PLATFORM_NAMES.map(name => <Chip key={name} label={name} color={PC[name].color} bg={PC[name].light} />)}
-        </div>
+        <HeaderWidget />
       </div>
 
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "20px 16px" }}>
@@ -570,13 +714,64 @@ export default function SocialPulseApp() {
 
         {tab === "overview"  && <OverviewPage  filter={filter} />}
         {tab === "platforms" && <PlatformsPage />}
-        {tab === "insights"  && <InsightsPage />}
+        {tab === "growthtips" && <GrowthTipsPage />}
         {tab === "packages"  && <PackagesPage />}
       </div>
 
-      <div style={{ textAlign: "center", padding: "22px", color: "#D1D5DB", fontSize: 11 }}>
-        SocialPulse · React + Recharts frontend · FastAPI + PostgreSQL + Redis backend · Sonali Mitua · Bachelor's Thesis 2026
-      </div>
+      <Footer />
     </div>
+  );
+}
+
+function Footer() {
+  const year = new Date().getFullYear();
+  const footerSections = [
+    { title: "Product", links: ["Overview", "Platforms", "Growth Tips", "Packages"] },
+    { title: "Platforms", links: ["Instagram", "TikTok", "YouTube", "Facebook", "LinkedIn"] },
+    { title: "Project", links: ["About", "Tech Stack", "GitHub", "Documentation"] },
+  ];
+  return (
+    <footer style={{ background: "#0F0D1A", color: "#9CA3AF", marginTop: 60, padding: "48px 24px 28px" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: 40, marginBottom: 44 }}>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+              <span style={{ fontSize: 24 }}>📡</span>
+              <div style={{ fontSize: 18, fontWeight: 900, color: "#fff" }}>
+                Social<span style={{ color: "#A78BFA" }}>Pulse</span>
+              </div>
+            </div>
+            <p style={{ fontSize: 13, lineHeight: 1.7, color: "#6B7280", maxWidth: 260, margin: 0 }}>
+              Real-time analytics for creators and brands — track your growth across all platforms.
+            </p>
+          </div>
+          {footerSections.map(sec => (
+            <div key={sec.title}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: 1, textTransform: "uppercase", marginBottom: 14 }}>
+                {sec.title}
+              </div>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 9 }}>
+                {sec.links.map(link => (
+                  <li key={link}>
+                    <span style={{ fontSize: 13, color: "#6B7280", cursor: "pointer" }}
+                      onMouseEnter={e => e.target.style.color = "#A78BFA"}
+                      onMouseLeave={e => e.target.style.color = "#6B7280"}>
+                      {link}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <div style={{ height: 1, background: "#1F1B2E", marginBottom: 22 }} />
+        <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+        <div style={{ fontSize: 12, color: "#4B5563" }}>
+  Copyright © {year} SocialPulse. All Rights Reserved.
+</div>
+          
+        </div>
+      </div>
+    </footer>
   );
 }
