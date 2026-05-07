@@ -1,6 +1,5 @@
 
-# cache.py — Redis caching
-#
+# Redis caching
 # Stores dashboard data in memory for fast access.
 # Check Redis first → if fresh, serve it; if not, query PostgreSQL + cache result.
 # TTL = 60s, after that Redis clears and re-fetches from PostgreSQL.
@@ -37,7 +36,7 @@ def cache_get(key: str):
     try:
         value = redis_client.get(key)
         if value:
-            return json.loads(value)   # Convert JSON string back to Python dict
+            return json.loads(value)   
     except Exception:
         pass
     return None
