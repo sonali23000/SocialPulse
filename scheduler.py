@@ -72,7 +72,7 @@ def save_posts_to_db(df: pd.DataFrame, db):
 
 def fetch_all_platforms():
     """
-    Main job: fetch data from all 5 APIs and save to PostgreSQL.
+    fetch data from all 5 APIs and save to PostgreSQL.
     Called every 6 hours by the scheduler.
     """
     print(f"\n{'='*50}")
@@ -107,7 +107,7 @@ def fetch_all_platforms():
         except Exception as e:
             print(f" Facebook error: {e}")
 
-    # ── LinkedIn API ──
+    #  LinkedIn API 
     if LI_ORG_ID and os.getenv("LINKEDIN_ACCESS_TOKEN"):
         try:
             from api_clients.linkedin import fetch_linkedin_posts
@@ -120,7 +120,7 @@ def fetch_all_platforms():
         except Exception as e:
             print(f"LinkedIn error: {e}")
 
-    # ── YouTube Data API v3 ──
+    #  YouTube Data API v3 
     if YT_CHANNEL and os.getenv("YOUTUBE_API_KEY"):
         try:
             from api_clients.youtube_tiktok import fetch_youtube_videos
@@ -168,7 +168,7 @@ schedule.every(6).hours.do(fetch_all_platforms)
 
 if __name__ == "__main__":
     print("🕐 Scheduler started. Fetching now and then every 6 hours...")
-    fetch_all_platforms()   # Run immediately on startup
+    fetch_all_platforms()  
     while True:
         schedule.run_pending()
         time.sleep(60)

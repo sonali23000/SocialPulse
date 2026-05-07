@@ -676,7 +676,7 @@ function HeaderWidget() {
 export default function SocialPulseApp() {
   const [tab, setTab] = useState("overview");
   const [filter, setFilter] = useState("All");
-
+  const [page, setPage] = useState("app"); // "app" | "sign in" | "Get started"
   return (
     <div style={{ minHeight: "100vh", background: "#F8F7FC", fontFamily: "'Inter','Segoe UI',sans-serif" }}>
       <div style={{ background: "#fff", borderBottom: "1.5px solid #F0EDF8", padding: "11px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 100, boxShadow: "0 2px 14px rgba(124,58,237,.05)" }}>
@@ -718,9 +718,60 @@ export default function SocialPulseApp() {
         {tab === "packages"  && <PackagesPage />}
       </div>
 
-      <div style={{ textAlign: "center", padding: "22px", color: "#D1D5DB", fontSize: 11 }}>
-        
-      </div>
+      <Footer />
     </div>
+  );
+}
+
+function Footer() {
+  const year = new Date().getFullYear();
+  const footerSections = [
+    { title: "Product", links: ["Overview", "Platforms", "Growth Tips", "Packages"] },
+    { title: "Platforms", links: ["Instagram", "TikTok", "YouTube", "Facebook", "LinkedIn"] },
+    { title: "Project", links: ["About", "Tech Stack", "GitHub", "Documentation"] },
+  ];
+  return (
+    <footer style={{ background: "#0F0D1A", color: "#9CA3AF", marginTop: 60, padding: "48px 24px 28px" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: 40, marginBottom: 44 }}>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+              <span style={{ fontSize: 24 }}>📡</span>
+              <div style={{ fontSize: 18, fontWeight: 900, color: "#fff" }}>
+                Social<span style={{ color: "#A78BFA" }}>Pulse</span>
+              </div>
+            </div>
+            <p style={{ fontSize: 13, lineHeight: 1.7, color: "#6B7280", maxWidth: 260, margin: 0 }}>
+              Real-time analytics for creators and brands — track your growth across all platforms.
+            </p>
+          </div>
+          {footerSections.map(sec => (
+            <div key={sec.title}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: 1, textTransform: "uppercase", marginBottom: 14 }}>
+                {sec.title}
+              </div>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 9 }}>
+                {sec.links.map(link => (
+                  <li key={link}>
+                    <span style={{ fontSize: 13, color: "#6B7280", cursor: "pointer" }}
+                      onMouseEnter={e => e.target.style.color = "#A78BFA"}
+                      onMouseLeave={e => e.target.style.color = "#6B7280"}>
+                      {link}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <div style={{ height: 1, background: "#1F1B2E", marginBottom: 22 }} />
+        <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+        <div style={{ fontSize: 12, color: "#4B5563" }}>
+  Copyright © {year} SocialPulse. All Rights Reserved.
+</div>
+          
+        </div>
+      </div>
+    </footer>
   );
 }
