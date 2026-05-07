@@ -1,7 +1,4 @@
 
-#  api_clients/youtube.py — YouTube Data API v3
-
-
 import requests
 import os
 import pandas as pd
@@ -67,7 +64,7 @@ def fetch_youtube_videos(channel_id: str, days: int = 30) -> pd.DataFrame:
     if not video_ids:
         return pd.DataFrame()
 
-    # Step 2: Get statistics for all videos in one request (efficient)
+    # Step 2: Get statistics for all videos in one request 
     stats_data = _get("videos", params={
         "part": "snippet,statistics",
         "id": ",".join(video_ids),
@@ -103,7 +100,7 @@ def fetch_youtube_videos(channel_id: str, days: int = 30) -> pd.DataFrame:
 
 
 
-#  api_clients/tiktok.py — TikTok Research API
+#   TikTok Research API
 
 
 TIKTOK_BASE  = "https://open.tiktokapis.com/v2"
