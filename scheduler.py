@@ -2,12 +2,9 @@
 #  scheduler.py — Automated daily data fetching
 
 #  This script runs in the background and calls all 5 social
+
 #  media APIs every 6 hours to fetch fresh data.
 
-# Flow: APIs fetch → Pandas cleans → PostgreSQL stores → Redis cache clears
-
-#  Run this alongside main.py:
-#  python scheduler.py
 
 
 import schedule
@@ -23,7 +20,7 @@ from cache import cache_delete
 
 load_dotenv()
 
-# Account IDs (store these in your .env file) 
+# Account IDs 
 IG_USER_ID   = os.getenv("INSTAGRAM_USER_ID", "")
 FB_PAGE_ID   = os.getenv("FACEBOOK_PAGE_ID", "")
 LI_ORG_ID    = os.getenv("LINKEDIN_ORG_ID", "")
@@ -167,7 +164,7 @@ def fetch_all_platforms():
 schedule.every(6).hours.do(fetch_all_platforms)
 
 if __name__ == "__main__":
-    print("🕐 Scheduler started. Fetching now and then every 6 hours...")
+    print("Scheduler started. Fetching now and then every 6 hours...")
     fetch_all_platforms()  
     while True:
         schedule.run_pending()
