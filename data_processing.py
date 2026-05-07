@@ -1,5 +1,5 @@
 # Cleans & aggregates raw social media API data using Pandas.
-# Flow: API clients fetch → this file processes → PostgreSQL stores
+
 
 
 import pandas as pd
@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 
-# ── 1. Clean raw API data (Pandas DataFrame operations) ──
+# Clean raw API data 
 
 def clean_posts_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -29,7 +29,7 @@ def clean_posts_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         df["post_date"] = pd.to_datetime(df["post_date"], errors="coerce", utc=True)
         df = df.dropna(subset=["post_date"])   # Drop rows with invalid dates
 
-    # Remove duplicate posts (can happen if API calls overlap)
+    # Remove duplicate posts
     if "post_id" in df.columns:
         df = df.drop_duplicates(subset=["post_id"], keep="last")
 
@@ -40,7 +40,7 @@ def clean_posts_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     return df.reset_index(drop=True)
 
 
-# ── 2. Calculate engagement rate ──
+# 2. Calculate engagement rate 
 
 def calculate_engagement_rate(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -56,7 +56,7 @@ def calculate_engagement_rate(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-# ── 3. Aggregate metrics by platform ──
+# 3. Aggregate metrics by platform 
 
 def aggregate_by_platform(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -87,7 +87,7 @@ def aggregate_by_platform(df: pd.DataFrame) -> pd.DataFrame:
     return agg
 
 
-# ── 4. Daily time series (resample) ──
+# 4. Daily time series (resample) 
 
 def resample_daily(df: pd.DataFrame, platform: Optional[str] = None) -> pd.DataFrame:
     """
@@ -115,7 +115,7 @@ def resample_daily(df: pd.DataFrame, platform: Optional[str] = None) -> pd.DataF
     return daily
 
 
-# ── 5. Content type breakdown ──
+# 5. Content type breakdown 
 
 def content_type_breakdown(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -138,7 +138,7 @@ def content_type_breakdown(df: pd.DataFrame) -> pd.DataFrame:
     return breakdown.sort_values("avg_eng", ascending=False)
 
 
-# ── 6. Best hours analysis ──
+#  6. Best hours analysis 
 
 def best_hours_analysis(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -170,7 +170,7 @@ def best_hours_analysis(df: pd.DataFrame) -> pd.DataFrame:
     return hourly.sort_values("hour")
 
 
-# ── 7. Hashtag performance ──
+# 7. Hashtag performance 
 
 def hashtag_performance(df: pd.DataFrame) -> pd.DataFrame:
     """

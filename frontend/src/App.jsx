@@ -89,7 +89,7 @@ const TT = ({ active, payload, label }) => {
 function LoadingSpinner({ text = "Loading..." }) {
   return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 40, gap: 10, color: "#9CA3AF", fontSize: 13 }}>
-      <span>⏳</span> {text}
+      <span> </span> {text}
     </div>
   );
 }
@@ -97,7 +97,7 @@ function LoadingSpinner({ text = "Loading..." }) {
 function ErrorBox({ message }) {
   return (
     <div style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 10, padding: "12px 16px", color: "#DC2626", fontSize: 13 }}>
-      ⚠️ {message}
+       {message}
     </div>
   );
 }
@@ -155,7 +155,7 @@ function OverviewPage({ filter }) {
       </div>
 
       <div style={{ background: "#fff", borderRadius: 20, padding: 22, border: "1.5px solid #F0EDF8" }}>
-        <div style={{ fontSize: 15, fontWeight: 800, color: "#111827", marginBottom: 14 }}>📊 Engagement Trend — Last 100 Days</div>
+        <div style={{ fontSize: 15, fontWeight: 800, color: "#111827", marginBottom: 14 }}>Engagement Trend — Last 100 Days</div>
         <ResponsiveContainer width="100%" height={210}>
           <AreaChart data={timeseries} margin={{ top: 4, right: 4, left: -22, bottom: 0 }}>
             <defs>
@@ -360,8 +360,8 @@ function PlatformsPage() {
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(110px,1fr))", gap: 8, marginBottom: 18 }}>
-            {[["❤️", data.likes, p.color], ["💬", data.comments, "#F59E0B"], ["🔁", data.shares, "#10B981"],
-              ["▶️", data.views, "#FF0000"], ["📈", `${data.engagement_rate}%`, "#8B5CF6"], ["🎯", data.reach, "#3B82F6"]
+            {[[data.likes, p.color], [data.comments, "#F59E0B"], [data.shares, "#10B981"],
+              [data.views, "#FF0000"], [`${data.engagement_rate}%`, "#8B5CF6"], [data.reach, "#3B82F6"]
             ].map(([l, v, c]) => (
               <div key={l} style={{ background: "#F9FAFB", borderRadius: 10, padding: "10px 8px", textAlign: "center" }}>
                 <div style={{ fontSize: 16, fontWeight: 900, color: c }}>{typeof v === "number" ? v.toLocaleString() : v}</div>
@@ -397,7 +397,7 @@ function PlatformsPage() {
 function GrowthTipsPage() {
   const tips = [
     {
-      category: "🔥 Go Viral",
+      category: "Go Viral",
       color: "#FF4D4D",
       light: "#FFF0F0",
       items: [
@@ -408,7 +408,7 @@ function GrowthTipsPage() {
       ]
     },
     {
-      category: "📈 Grow Your Reach",
+      category: "Grow Your Reach",
       color: "#7C3AED",
       light: "#F5F0FF",
       items: [
@@ -419,7 +419,7 @@ function GrowthTipsPage() {
       ]
     },
     {
-      category: "🌊 Ride Trends",
+      category: "Ride Trends",
       color: "#0EA5E9",
       light: "#F0F9FF",
       items: [
@@ -430,7 +430,7 @@ function GrowthTipsPage() {
       ]
     },
     {
-      category: "💄 Beauty & Makeup Creator Tips",
+      category: "Beauty & Makeup Creator Tips",
       color: "#EC4899",
       light: "#FFF0F8",
       items: [
@@ -504,7 +504,7 @@ function GrowthTipsPage() {
         border: "1.5px solid #ede9fe",
         display: "flex", alignItems: "center", gap: 14
       }}>
-        <span style={{ fontSize: 32 }}>💡</span>
+        <span style={{ fontSize: 32 }}></span>
         <div>
           <div style={{ fontSize: 13, fontWeight: 800, color: "#1e1b4b", marginBottom: 3 }}>Consistency beats perfection</div>
           <div style={{ fontSize: 12, color: "#6B7280", lineHeight: 1.6 }}>
@@ -524,18 +524,17 @@ function PackagesPage() {
   const [chosen, setChosen] = useState("Pro");
 
   const plans = [
-    { name: "Starter", icon: "🌱", color: "#10B981", light: "#ECFDF5", monthly: 0, annual: 0, features: ["2 platforms", "500 posts/month", "1 user", "Basic reports", "Email alerts"] },
-    { name: "Pro", icon: "⚡", color: "#7C3AED", light: "#F5F0FF", monthly: 9, annual: 7, popular: true, features: ["All 5 platforms", "5,000 posts/month", "3 users", "Advanced analytics", "AI insights", "Hashtag tracker", "Best-time suggestions", "Priority email"] },
-    { name: "Business", icon: "🏢", color: "#1877F2", light: "#EEF4FF", monthly: 19, annual: 15, features: ["All 5 platforms", "25,000 posts/month", "10 users", "Full analytics", "API access", "Custom reports", "Competitor tracking", "Live chat"] },
-    { name: "Enterprise", icon: "🚀", color: "#E1306C", light: "#FFF0F5", monthly: 49, annual: 39, features: ["All 5 platforms", "Unlimited posts", "Unlimited users", "Custom dashboards", "Dedicated API", "SLA guarantee", "Onboarding call", "Account manager"] },
+    { name: "Starter", color: "#10B981", light: "#ECFDF5", monthly: 0, annual: 0, features: ["2 platforms", "500 posts/month", "1 user", "Basic reports", "Email alerts"] },
+    { name: "Pro", color: "#7C3AED", light: "#F5F0FF", monthly: 9, annual: 7, popular: true, features: ["All 5 platforms", "5,000 posts/month", "3 users", "Advanced analytics", "AI insights", "Hashtag tracker", "Best-time suggestions", "Priority email"] },
+    { name: "Business", color: "#1877F2", light: "#EEF4FF", monthly: 19, annual: 15, features: ["All 5 platforms", "25,000 posts/month", "10 users", "Full analytics", "API access", "Custom reports", "Competitor tracking", "Live chat"] },
+    { name: "Enterprise", color: "#E1306C", light: "#FFF0F5", monthly: 49, annual: 39, features: ["All 5 platforms", "Unlimited posts", "Unlimited users", "Custom dashboards", "Dedicated API", "SLA guarantee", "Onboarding call", "Account manager"] },
   ];
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <div style={{ background: "linear-gradient(135deg,#7C3AED,#A78BFA)", borderRadius: 18, padding: "18px 24px", color: "#fff", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
         <div>
-          <div style={{ fontSize: 17, fontWeight: 900 }}>💸 Save up to 94% vs competitors</div>
-          <div style={{ fontSize: 12, opacity: .85, marginTop: 3 }}>Hootsuite €159/mo · Brandwatch €800/mo · Our Pro plan: €9/mo</div>
+        
         </div>
         <div style={{ display: "flex", gap: 5, background: "rgba(255,255,255,.15)", borderRadius: 99, padding: 4 }}>
           {["monthly", "annual"].map(b => (
@@ -579,10 +578,10 @@ function PackagesPage() {
 //  MAIN APP
 
 const TABS = [
-  { id: "overview",  label: "Overview",  icon: "📊" },
-  { id: "platforms", label: "Platforms", icon: "🌐" },
-  { id: "growthtips", label: "Growth Tips", icon: "🚀" },
-  { id: "packages",  label: "Packages",  icon: "💎" },
+  { id: "overview",  label: "Overview" },
+  { id: "platforms", label: "Platforms"},
+  { id: "growthtips", label: "Growth Tips"},
+  { id: "packages",  label: "Packages"},
 ];
 
 const CREATOR_QUOTES = [
