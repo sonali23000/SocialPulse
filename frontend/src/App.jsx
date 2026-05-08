@@ -877,7 +877,7 @@ export default function SocialPulseApp() {
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <HeaderWidget />
+          
           <button
             onClick={() => setPage("sign in")}
             style={{
