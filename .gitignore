@@ -1,4 +1,6 @@
-# !! NEVER upload these to GitHub !!
+# Files and folders ignored by Git
+
+
 .env
 *.env
 
@@ -10,7 +12,7 @@ __pycache__/
 venv/
 env/
 
-# Database
+# database
 *.db
 *.sqlite
 
