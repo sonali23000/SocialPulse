@@ -1,6 +1,5 @@
-# ============================================================
-#  routes/platforms.py — Platform account endpoints
-# ============================================================
+# Platform account endpoints
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from database import get_db, Account
@@ -40,9 +39,8 @@ def get_platform(platform_name: str, db: Session = Depends(get_db)):
                      "followers": acc.followers, "growth": acc.growth, "api": acc.api_source}}
 
 
-# ============================================================
-#  routes/posts.py — Posts list endpoint
-# ============================================================
+# Posts list endpoint
+
 from fastapi import APIRouter as _R, Depends as _D, Query
 from sqlalchemy.orm import Session as _S
 from database import get_db as _gdb, Post
@@ -98,27 +96,26 @@ def get_posts(
 router = posts_router
 
 
-# ============================================================
-#  routes/packages.py — Pricing plans endpoint
-# ============================================================
+# Pricing plans endpoint
+
 from fastapi import APIRouter as _RP
 from cache import cache_get as _cg2, cache_set as _cs2
 
 packages_router = _RP()
 
 PLANS = [
-    {"name": "Starter",    "icon": "🌱", "monthly_eur": 0,  "annual_eur": 0,
+    {"name": "Starter", "monthly_eur": 0,  "annual_eur": 0,
      "popular": False, "max_platforms": 2, "max_posts": 500,   "max_users": 1,
      "features": ["2 platforms (any)","500 posts/month","1 user","Basic reports","Email alerts"]},
-    {"name": "Pro",        "icon": "⚡", "monthly_eur": 9,  "annual_eur": 7,
+    {"name": "Pro", "monthly_eur": 9,  "annual_eur": 7,
      "popular": True,  "max_platforms": 5, "max_posts": 5000,  "max_users": 3,
      "features": ["All 5 platforms","5,000 posts/month","3 users","Advanced analytics",
                   "AI insights","Hashtag tracker","Best-time suggestions","Priority email"]},
-    {"name": "Business",   "icon": "🏢", "monthly_eur": 19, "annual_eur": 15,
+    {"name": "Business", "monthly_eur": 19, "annual_eur": 15,
      "popular": False, "max_platforms": 5, "max_posts": 25000, "max_users": 10,
      "features": ["All 5 platforms","25,000 posts/month","10 users","Full analytics",
                   "API access","Custom reports","Competitor tracking","Live chat"]},
-    {"name": "Enterprise", "icon": "🚀", "monthly_eur": 49, "annual_eur": 39,
+    {"name": "Enterprise", "monthly_eur": 49, "annual_eur": 39,
      "popular": False, "max_platforms": 5, "max_posts": -1,    "max_users": -1,
      "features": ["All 5 platforms","Unlimited posts","Unlimited users","Custom dashboards",
                   "Dedicated API","SLA guarantee","Onboarding call","Account manager"]},

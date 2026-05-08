@@ -1,14 +1,6 @@
-# ============================================================
-#  routes/analytics.py — Dashboard analytics endpoints
-#
-#  These are the API endpoints the React frontend calls.
-#  Each function:
-#    1. Checks Redis cache first
-#    2. If cache miss → queries PostgreSQL via SQLAlchemy
-#    3. Processes data with Pandas
-#    4. Saves result to Redis for next request
-#    5. Returns JSON to the React frontend
-# ============================================================
+
+#   Dashboard analytics endpoints
+
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
