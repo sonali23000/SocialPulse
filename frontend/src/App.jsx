@@ -553,7 +553,6 @@ function PackagesPage() {
             <div key={pl.name} onClick={() => setChosen(pl.name)} style={{ background: "#fff", borderRadius: 20, padding: 20, cursor: "pointer", transition: "all .2s", border: active ? `2.5px solid ${pl.color}` : "1.5px solid #F0EDF8", boxShadow: active ? `0 4px 28px ${pl.color}25` : "0 1px 4px rgba(0,0,0,.04)", position: "relative" }}>
               {pl.popular && <div style={{ position: "absolute", top: -11, left: "50%", transform: "translateX(-50%)", background: pl.color, color: "#fff", fontSize: 10, fontWeight: 800, padding: "2px 12px", borderRadius: 99 }}>⭐ Most Popular</div>}
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-                <div style={{ width: 34, height: 34, borderRadius: 9, background: pl.light, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15 }}>{pl.icon}</div>
                 <div style={{ fontWeight: 800, fontSize: 14, color: "#111827" }}>{pl.name}</div>
               </div>
               <div style={{ marginBottom: 12 }}>
