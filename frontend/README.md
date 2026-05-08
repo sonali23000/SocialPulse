@@ -1,16 +1,52 @@
-# React + Vite
+# SocialPulse — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React-based analytics dashboard for social media creators and brands. Built with Vite for fast development and hot module replacement.
 
-Currently, two official plugins are available:
+## What This Frontend Does
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+SocialPulse frontend gives you a clean dashboard to monitor your social media performance across Instagram, Facebook, LinkedIn, YouTube and TikTok — all in one place.
 
-## React Compiler
+It has 4 main pages:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Overview** — shows total followers, likes, comments, shares, saves, reach, video views and engagement rate. Also includes an engagement trend chart for the last 100 days, platform share pie chart, and best content format breakdown.
+- **Platforms** — lets you switch between platforms and see per-platform stats like followers and growth.
+- **Growth Tips** — practical tips for going viral, growing reach, riding trends, and beauty/makeup creator specific advice.
+- **Packages** — pricing plans (Starter, Pro, Business, Enterprise) with monthly/annual billing toggle.
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Tech Stack
+
+- React 19
+- Vite 8
+- Recharts (for all charts — area, bar, pie, line)
+- Lucide React (icons)
+
+## How to Run
+
+Make sure you have Node.js installed, then:
+
+
+cd frontend
+npm install
+npm run dev
+
+
+The app runs on `http://localhost:5173` by default.
+
+> The frontend connects to the backend at `http://localhost:8000` — make sure the Python backend is also running or there will be a connection error.
+
+## Folder Structure
+frontend/
+├── src/
+│   ├── App.jsx        # All pages and components live here
+│   ├── App.css        # Global styles
+│   ├── main.jsx       # React entry point
+│   └── assets/        # Images and icons
+├── index.html
+├── vite.config.js
+└── package.json
+
+## Notes
+
+- All 4 pages and reusable components are in `App.jsx`
+- Backend API base URL is set as `const API = "http://localhost:8000"` — change this if your backend runs on a different port.
