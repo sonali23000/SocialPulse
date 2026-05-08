@@ -301,25 +301,127 @@ function OverviewPage({ filter }) {
 
 //  PAGE 2 — PLATFORMS
 
+// Platform info: descriptions, best post times, content tips per platform
+const PLATFORM_INFO = {
+  Instagram: {
+    desc: "Visual storytelling platform. Best for photos, Reels, and Stories. High engagement with beauty and lifestyle content.",
+    bestTimes: ["Mon 6–9 PM", "Wed 11 AM", "Fri 10 AM–1 PM"],
+    contentTypes: ["Reels", "Carousel", "Stories", "Static Post"],
+    tips: [
+      "Post Reels 4–5x per week for maximum reach",
+      "Use 5–10 hashtags — quality over quantity",
+      "Reply to comments within the first hour of posting",
+      "Stories daily keep your audience warm",
+    ],
+    metrics: ["Followers", "Likes", "Comments", "Saves", "Reach", "Impressions"],
+  },
+  Facebook: {
+    desc: "Community and sharing platform. Great for longer content, events, and reaching an older demographic.",
+    bestTimes: ["Wed 1–4 PM", "Thu–Fri 1–3 PM", "Sat–Sun 12–1 PM"],
+    contentTypes: ["Video", "Link Post", "Photo", "Event"],
+    tips: [
+      "Videos get 3x more engagement than link posts",
+      "Post 1–2 times per day — don't over-post",
+      "Use Facebook Groups to build community",
+      "Boost high-performing organic posts with ads",
+    ],
+    metrics: ["Page Likes", "Post Reach", "Reactions", "Shares", "Comments", "Clicks"],
+  },
+  LinkedIn: {
+    desc: "Professional network. Best for thought leadership, B2B content, and career-related posts.",
+    bestTimes: ["Tue–Thu 7–8 AM", "Tue–Thu 12 PM", "Tue–Thu 5–6 PM"],
+    contentTypes: ["Article", "Text Post", "Document", "Poll"],
+    tips: [
+      "Personal stories outperform promotional content",
+      "Post 3–5x per week for consistent visibility",
+      "Use the first 2 lines to hook — most users don't click 'see more'",
+      "Tag people you mention to expand reach",
+    ],
+    metrics: ["Followers", "Impressions", "Clicks", "Reactions", "Comments", "Shares"],
+  },
+  YouTube: {
+    desc: "Long-form video platform. Strong for tutorials, vlogs, and evergreen content. Second largest search engine.",
+    bestTimes: ["Thu–Fri 2–4 PM", "Sat–Sun 9–11 AM", "Fri 12 PM"],
+    contentTypes: ["Long-form Video", "Short", "Live Stream", "Community Post"],
+    tips: [
+      "Titles and thumbnails decide your click-through rate",
+      "First 30 seconds must hook viewers — no long intros",
+      "Upload Shorts alongside main videos for extra reach",
+      "SEO: put your main keyword in title, description, and tags",
+    ],
+    metrics: ["Subscribers", "Views", "Watch Time", "Likes", "Comments", "CTR"],
+  },
+  TikTok: {
+    desc: "Short-form video with massive organic reach potential. Trend-driven and algorithm-powered discovery.",
+    bestTimes: ["Tue 9 AM", "Thu 12 PM", "Fri 5 AM & 1–3 PM"],
+    contentTypes: ["Short Video", "Duet", "Stitch", "LIVE"],
+    tips: [
+      "Hook in the first 1–3 seconds or viewers scroll away",
+      "Use trending sounds early — before they peak",
+      "Post 1–3x daily for algorithm momentum",
+      "Reply to comments with a video for double the content",
+    ],
+    metrics: ["Followers", "Video Views", "Likes", "Comments", "Shares", "Profile Visits"],
+  },
+};
+
 function PlatformsPage() {
   const [sel, setSel] = useState("Instagram");
-  const [data, setData] = useState(null);
+  const [account, setAccount] = useState(null);
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     setLoading(true);
     setError(null);
-    fetch(`${API}/api/platforms/${sel}`)
-      .then(r => r.json())
-      .then(json => { setData(json.data); setLoading(false); })
-      .catch(() => { setError("Could not load platform data."); setLoading(false); });
+    setAccount(null);
+    setPosts([]);
+
+    Promise.all([
+      fetch(`${API}/api/platforms/${sel}`).then(r => r.json()).catch(() => null),
+      fetch(`${API}/api/posts?platform=${sel}&limit=30`).then(r => r.json()).catch(() => null),
+    ]).then(([accRes, postsRes]) => {
+      if (accRes?.data) setAccount(accRes.data);
+      if (postsRes?.data) setPosts(postsRes.data);
+      setLoading(false);
+    }).catch(() => {
+      setError("Could not connect to backend. Make sure your server is running.");
+      setLoading(false);
+    });
   }, [sel]);
 
   const p = PC[sel] || PC.Instagram;
+  const info = PLATFORM_INFO[sel];
+
+  const totalLikes    = posts.reduce((s, p) => s + (p.likes || 0), 0);
+  const totalComments = posts.reduce((s, p) => s + (p.comments || 0), 0);
+  const totalShares   = posts.reduce((s, p) => s + (p.shares || 0), 0);
+  const totalViews    = posts.reduce((s, p) => s + (p.views || 0), 0);
+  const totalReach    = posts.reduce((s, p) => s + (p.reach || 0), 0);
+  const totalImpr     = posts.reduce((s, p) => s + (p.impressions || 0), 0);
+  const engRate       = totalImpr > 0
+    ? (((totalLikes + totalComments + totalShares) / totalImpr) * 100).toFixed(2)
+    : "—";
+
+  const chartData = [...posts]
+    .sort((a, b) => new Date(a.post_date) - new Date(b.post_date))
+    .map(p => ({
+      date: p.post_date?.slice(5) || "",
+      likes: p.likes || 0,
+      comments: p.comments || 0,
+    }));
+
+  const typeMap = {};
+  posts.forEach(p => {
+    const t = p.content_type || "other";
+    typeMap[t] = (typeMap[t] || 0) + 1;
+  });
+  const typeData = Object.entries(typeMap).map(([name, value]) => ({ name, value }));
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
         {PLATFORM_NAMES.map(name => {
           const ap = PC[name];
@@ -333,9 +435,7 @@ function PlatformsPage() {
               outline: active ? "none" : `2px solid ${ap.color}28`,
             }}>
               <Ava platform={name} size={26} />
-              <div style={{ textAlign: "left" }}>
-                <div style={{ fontSize: 12, fontWeight: 800, color: active ? "#fff" : "#111827" }}>{name}</div>
-              </div>
+              <div style={{ fontSize: 12, fontWeight: 800, color: active ? "#fff" : "#111827" }}>{name}</div>
             </button>
           );
         })}
@@ -343,49 +443,138 @@ function PlatformsPage() {
 
       {loading && <LoadingSpinner text={`Loading ${sel} data...`} />}
       {error && <ErrorBox message={error} />}
-      {!loading && !error && data && (
-        <div style={{ background: "#fff", borderRadius: 20, padding: 22, border: `2px solid ${p.color}30`, boxShadow: `0 4px 24px ${p.color}10` }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
-            <Ava platform={sel} size={50} />
-            <div>
-              <div style={{ fontSize: 19, fontWeight: 900, color: "#111827" }}>{sel}</div>
-              <div style={{ fontSize: 12, color: "#6B7280", marginBottom: 4 }}>{data.handle}</div>
-              <Chip label={`via ${data.api_source}`} color={p.color} bg={p.light} />
-            </div>
-            <div style={{ marginLeft: "auto", textAlign: "right" }}>
-              <div style={{ fontSize: 26, fontWeight: 900, color: p.color }}>{data.followers?.toLocaleString()}</div>
-              <div style={{ fontSize: 10, color: "#9CA3AF" }}>followers</div>
-              <div style={{ fontSize: 12, color: "#10B981", fontWeight: 700 }}>+{data.growth} this week</div>
-            </div>
-          </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(110px,1fr))", gap: 8, marginBottom: 18 }}>
-            {[[data.likes, p.color], [data.comments, "#F59E0B"], [data.shares, "#10B981"],
-              [data.views, "#FF0000"], [`${data.engagement_rate}%`, "#8B5CF6"], [data.reach, "#3B82F6"]
-            ].map(([l, v, c]) => (
-              <div key={l} style={{ background: "#F9FAFB", borderRadius: 10, padding: "10px 8px", textAlign: "center" }}>
-                <div style={{ fontSize: 16, fontWeight: 900, color: c }}>{typeof v === "number" ? v.toLocaleString() : v}</div>
-                <div style={{ fontSize: 10, color: "#9CA3AF", marginTop: 2 }}>{l}</div>
+      {!loading && !error && (
+        <>
+          <div style={{ background: `linear-gradient(135deg, ${p.color}15, ${p.color}05)`, borderRadius: 20, padding: 22, border: `2px solid ${p.color}30` }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
+              <Ava platform={sel} size={54} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 20, fontWeight: 900, color: "#111827" }}>{info.emoji} {sel}</div>
+                <div style={{ fontSize: 12, color: "#6B7280", marginTop: 3, maxWidth: 420 }}>{info.desc}</div>
+                {account && (
+                  <div style={{ marginTop: 5, display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    <Chip label={`@${account.handle}`} color={p.color} bg={p.light} />
+                    {account.api_source && <Chip label={`via ${account.api_source}`} color="#6B7280" bg="#F3F4F6" />}
+                  </div>
+                )}
               </div>
-            ))}
+              {account ? (
+                <div style={{ textAlign: "right" }}>
+                  <div style={{ fontSize: 28, fontWeight: 900, color: p.color }}>{(account.followers || 0).toLocaleString()}</div>
+                  <div style={{ fontSize: 11, color: "#9CA3AF" }}>followers</div>
+                  {account.growth > 0 && <div style={{ fontSize: 12, color: "#10B981", fontWeight: 700 }}>+{account.growth} this week</div>}
+                </div>
+              ) : (
+                <div style={{ textAlign: "right", background: p.light, borderRadius: 12, padding: "10px 16px" }}>
+                  <div style={{ fontSize: 11, color: p.color, fontWeight: 700 }}>⚠️ No account data</div>
+                  <div style={{ fontSize: 10, color: "#9CA3AF", marginTop: 2 }}>Connect your {sel} account</div>
+                </div>
+              )}
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(100px,1fr))", gap: 8 }}>
+              {[
+                { label: "Total Likes",  value: totalLikes.toLocaleString(),    color: p.color,   icon: "❤️" },
+                { label: "Comments",     value: totalComments.toLocaleString(), color: "#F59E0B", icon: "💬" },
+                { label: "Shares",       value: totalShares.toLocaleString(),   color: "#10B981", icon: "🔁" },
+                { label: "Video Views",  value: totalViews.toLocaleString(),    color: "#FF0000", icon: "▶️" },
+                { label: "Total Reach",  value: totalReach.toLocaleString(),    color: "#3B82F6", icon: "📡" },
+                { label: "Eng. Rate",    value: `${engRate}%`,                  color: "#8B5CF6", icon: "📊" },
+              ].map(s => (
+                <div key={s.label} style={{ background: "#fff", borderRadius: 12, padding: "10px 8px", textAlign: "center", boxShadow: "0 1px 4px rgba(0,0,0,.05)" }}>
+                  <div style={{ fontSize: 14 }}>{s.icon}</div>
+                  <div style={{ fontSize: 15, fontWeight: 900, color: s.color, marginTop: 2 }}>{posts.length > 0 ? s.value : "—"}</div>
+                  <div style={{ fontSize: 10, color: "#9CA3AF", marginTop: 2 }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div style={{ fontSize: 11, color: "#9CA3AF", marginBottom: 8 }}>30-day engagement trend</div>
-          <ResponsiveContainer width="100%" height={170}>
-            <AreaChart data={data.timeseries || []} margin={{ top: 4, right: 4, left: -22, bottom: 0 }}>
-              <defs>
-                <linearGradient id="platG" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={p.color} stopOpacity={0.3} /><stop offset="100%" stopColor={p.color} stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
-              <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#9CA3AF" }} tickLine={false} axisLine={false} interval={4} />
-              <YAxis tick={{ fontSize: 10, fill: "#9CA3AF" }} tickLine={false} axisLine={false} />
-              <Tooltip content={<TT />} />
-              <Area type="monotone" dataKey="engagement" name="Engagement" stroke={p.color} fill="url(#platG)" strokeWidth={2.5} dot={false} />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
+          {posts.length > 0 ? (
+            <div style={{ background: "#fff", borderRadius: 18, padding: 20, border: "1px solid #F0EDF8" }}>
+              <div style={{ fontSize: 13, fontWeight: 800, color: "#111827", marginBottom: 4 }}>Post Engagement (last 30 posts)</div>
+              <div style={{ fontSize: 11, color: "#9CA3AF", marginBottom: 12 }}>Likes and comments per post over time</div>
+              <ResponsiveContainer width="100%" height={180}>
+                <AreaChart data={chartData} margin={{ top: 4, right: 4, left: -22, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id={`grad_${sel}`} x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor={p.color} stopOpacity={0.3} />
+                      <stop offset="100%" stopColor={p.color} stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
+                  <XAxis dataKey="date" tick={{ fontSize: 9, fill: "#9CA3AF" }} tickLine={false} axisLine={false} interval={4} />
+                  <YAxis tick={{ fontSize: 9, fill: "#9CA3AF" }} tickLine={false} axisLine={false} />
+                  <Tooltip content={<TT />} />
+                  <Area type="monotone" dataKey="likes"    name="Likes"    stroke={p.color} fill={`url(#grad_${sel})`} strokeWidth={2} dot={false} />
+                  <Area type="monotone" dataKey="comments" name="Comments" stroke="#F59E0B" fill="none" strokeWidth={1.5} dot={false} strokeDasharray="4 2" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <div style={{ background: "#fff", borderRadius: 18, padding: 32, textAlign: "center", border: "1px solid #F0EDF8" }}>
+              <div style={{ fontSize: 32, marginBottom: 8 }}>📭</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: "#374151" }}>No post data yet for {sel}</div>
+              <div style={{ fontSize: 12, color: "#9CA3AF", marginTop: 4 }}>Once your {sel} account is connected and synced, posts will appear here.</div>
+            </div>
+          )}
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+            <div style={{ background: "#fff", borderRadius: 18, padding: 18, border: "1px solid #F0EDF8" }}>
+              <div style={{ fontSize: 13, fontWeight: 800, color: "#111827", marginBottom: 12 }}> Best Times to Post</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {info.bestTimes.map((t, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, background: i === 0 ? p.light : "#F9FAFB", borderRadius: 10, padding: "8px 12px" }}>
+                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: i === 0 ? p.color : "#D1D5DB", flexShrink: 0 }} />
+                    <div style={{ fontSize: 12, color: "#374151", fontWeight: i === 0 ? 700 : 400 }}>{t}</div>
+                    {i === 0 && <Chip label="Best" color={p.color} bg={p.light} />}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ background: "#fff", borderRadius: 18, padding: 18, border: "1px solid #F0EDF8" }}>
+              <div style={{ fontSize: 13, fontWeight: 800, color: "#111827", marginBottom: 12 }}>Content Formats</div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
+                {info.contentTypes.map((ct, i) => (
+                  <div key={ct} style={{ background: i === 0 ? p.color : p.light, color: i === 0 ? "#fff" : p.color, borderRadius: 99, padding: "5px 13px", fontSize: 11, fontWeight: 700 }}>{ct}</div>
+                ))}
+              </div>
+              {typeData.length > 0 && (
+                <>
+                  <div style={{ fontSize: 11, color: "#9CA3AF", margin: "12px 0 6px" }}>From your actual posts:</div>
+                  {typeData.map(t => (
+                    <div key={t.name} style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "#374151", padding: "3px 0", borderBottom: "1px solid #F3F4F6" }}>
+                      <span style={{ textTransform: "capitalize" }}>{t.name}</span>
+                      <span style={{ fontWeight: 700, color: p.color }}>{t.value} posts</span>
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
+          </div>
+
+          <div style={{ background: "#fff", borderRadius: 18, padding: 18, border: "1px solid #F0EDF8" }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#111827", marginBottom: 12 }}>{sel} Growth Tips</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 10 }}>
+              {info.tips.map((tip, i) => (
+                <div key={i} style={{ background: p.light, borderRadius: 12, padding: "12px 14px", borderLeft: `3px solid ${p.color}` }}>
+                  <div style={{ fontSize: 11, color: "#374151", lineHeight: 1.5 }}>{tip}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ background: "#fff", borderRadius: 18, padding: 18, border: "1px solid #F0EDF8" }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#111827", marginBottom: 12 }}> Key Metrics Tracked on {sel}</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {info.metrics.map(m => (
+                <div key={m} style={{ background: "#F9FAFB", border: `1px solid ${p.color}30`, borderRadius: 8, padding: "6px 12px", fontSize: 11, fontWeight: 600, color: "#374151" }}>{m}</div>
+              ))}
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
