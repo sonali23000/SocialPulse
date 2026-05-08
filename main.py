@@ -1,11 +1,11 @@
 
 #  SocialPulse 
 #  Tools used here:
-#   - FastAPI     → Python web server (creates the endpoints)
-#   - Pandas      → Data cleaning and aggregation
-#   - SQLAlchemy  → Connects Python to PostgreSQL database
-#   - Redis       → Caching to speed up dashboard loads
-#   - Requests    → Makes HTTP calls to social media APIs
+#   FastAPI    Python web server 
+#    Pandas     Data cleaning and aggregation
+#    SQLAlchemy  Connects Python to PostgreSQL database
+#   Redis       Caching to speed up dashboard loads
+#   Requests    Makes HTTP calls to social media APIs
 
 
 from fastapi import FastAPI, HTTPException
