@@ -876,7 +876,30 @@ export default function SocialPulseApp() {
             <div style={{ fontSize: 10, color: "#9CA3AF" }}>Digital & Social Media Analytics</div>
           </div>
         </div>
-        <HeaderWidget />
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <HeaderWidget />
+          <button
+            onClick={() => setPage("sign in")}
+            style={{
+              padding: "8px 16px", borderRadius: 10, fontSize: 12, fontWeight: 700,
+              cursor: "pointer", border: "1.5px solid #7C3AED",
+              background: "transparent", color: "#7C3AED",
+            }}
+          >
+            Log In
+          </button>
+          <button
+            onClick={() => setPage("Get started")}
+            style={{
+              padding: "8px 16px", borderRadius: 10, fontSize: 12, fontWeight: 700,
+              cursor: "pointer", border: "none",
+              background: "linear-gradient(135deg,#7C3AED,#EC4899)",
+              color: "#fff", boxShadow: "0 4px 14px rgba(124,58,237,0.3)",
+            }}
+          >
+            Start Free Trial
+          </button>
+        </div>
       </div>
 
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "20px 16px" }}>
