@@ -1,7 +1,7 @@
 
-# database.py — SQLAlchemy + PostgreSQL setup
-# SQLAlchemy lets Python talk to PostgreSQL using objects instead of raw SQL.
-# DATABASE_URL is loaded from .env so credentials stay out of the code.
+# SQLAlchemy + PostgreSQL setup
+
+
 
 
 from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, Boolean
@@ -19,7 +19,7 @@ DATABASE_URL = os.getenv(
     "postgresql://postgres:sonali123@localhost:5432/socialpulse"
 )
 
-# Create the SQLAlchemy engine (the actual connection to PostgreSQL)
+# Create the SQLAlchemy engine 
 engine = create_engine(DATABASE_URL)
 
 # SessionLocal is used to open/close database sessions in routes
@@ -36,11 +36,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
-
-
-#  DATABASE MODELS (SQLAlchemy ORM)
-#  Each class = one table in PostgreSQL
 
 
 class Account(Base):
