@@ -73,7 +73,7 @@ def fetch_all_platforms():
     Called every 6 hours by the scheduler.
     """
     print(f"\n{'='*50}")
-    print(f"🔄 Starting data fetch at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Starting data fetch at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"{'='*50}")
 
     db = SessionLocal()
@@ -83,7 +83,7 @@ def fetch_all_platforms():
     if IG_USER_ID and os.getenv("META_ACCESS_TOKEN"):
         try:
             from api_clients.meta import fetch_instagram_posts
-            print("📸 Fetching Instagram posts...")
+            print("Fetching Instagram posts...")
             ig_df = fetch_instagram_posts(IG_USER_ID, days=30)
             ig_df = clean_posts_dataframe(ig_df)
             ig_df = calculate_engagement_rate(ig_df)

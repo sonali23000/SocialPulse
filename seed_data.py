@@ -26,8 +26,8 @@ db.commit()
 # Add posts
 platforms     = ["Instagram","Facebook","LinkedIn","YouTube","TikTok"]
 content_types = ["image","video","carousel","reel","short"]
-captions      = ["New product launch 🚀","Behind the scenes ✨","Client success 🏆",
-                 "Tips & tricks 💡","Community spotlight 💬"]
+captions      = ["New product launch ","Behind the scenes ","Client success ",
+                 "Tips & tricks ","Community spotlight "]
 
 for i in range(100):
     platform = platforms[i % 5]
