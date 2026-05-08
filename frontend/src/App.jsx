@@ -25,7 +25,7 @@ const PIE_COLS = ["#E1306C", "#1877F2", "#0A66C2", "#FF0000", "#2DD4CF"];
 const PLATFORM_NAMES = ["Instagram", "Facebook", "LinkedIn", "YouTube", "TikTok"];
 
 
-//  REUSABLE COMPONENTS
+// REUSABLE COMPONENTS
 
 function Ava({ platform, size = 36 }) {
   const p = PC[platform] || { grad: ["#7C3AED", "#A78BFA"] };
@@ -195,7 +195,7 @@ function OverviewPage({ filter }) {
       background: "linear-gradient(135deg,#7C3AED,#a78bfa)",
       borderRadius: 10, padding: "5px 10px",
       fontSize: 15
-    }}>🌐</span>
+    }}></span>
     <span style={{ fontSize: 14, fontWeight: 800, color: "#1e1b4b", letterSpacing: "-0.3px" }}>
       Platform Share
     </span>
@@ -247,7 +247,7 @@ function OverviewPage({ filter }) {
       background: "linear-gradient(135deg,#EC4899,#f472b6)",
       borderRadius: 10, padding: "5px 10px",
       fontSize: 15
-    }}>🎬</span>
+    }}></span>
     <span style={{ fontSize: 14, fontWeight: 800, color: "#1e1b4b", letterSpacing: "-0.3px" }}>
       Best Content Format
     </span>
